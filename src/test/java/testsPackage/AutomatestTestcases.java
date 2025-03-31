@@ -16,11 +16,11 @@ import org.testng.annotations.Test;
 import java.time.Duration;
 import java.util.List;
 
-public class testcases {
+public class AutomatestTestcases {
 
     WebDriver driver;
 
-//        @BeforeMethod
+    //        @BeforeMethod
 //    public void setup()
 //    {
 //
@@ -193,7 +193,7 @@ public class testcases {
 
     public void element_wait(By elementToWait) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(
+        wait.until(ExpectedConditions.presenceOfElementLocated(
                 elementToWait));
     }
 
@@ -264,8 +264,7 @@ public class testcases {
     public enum myBrowsersList {
         CHROME,
         FIREFOX,
-        EDGE,
-        IE
+        EDGE
     }
 }
 
