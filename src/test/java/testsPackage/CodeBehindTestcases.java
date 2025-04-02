@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -38,6 +39,12 @@ public class CodeBehindTestcases {
                 driver.get(url);
                 element_wait(logoElement);
             }
+            case "https://jqueryui.com/resources/demos/droppable/default.html" -> {
+                String logo_element = "draggable";
+                By logoElement = By.id(logo_element);
+                driver.get(url);
+                element_wait(logoElement);
+            }
             case "https://www.w3schools.com/html/html_tables.asp" -> {
                 String content_element = "w3-logo";
                 By logoElement = By.id(content_element);
@@ -62,8 +69,7 @@ public class CodeBehindTestcases {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        return wait.until(ExpectedConditions.presenceOfElementLocated(
-                elementToWait));
+        return wait.until(ExpectedConditions.presenceOfElementLocated(elementToWait));
     }
 
 
@@ -105,11 +111,6 @@ public class CodeBehindTestcases {
     public String element_getDomAttribute(By element, String attributeValue) {
         return driver.findElement(element).getDomAttribute(attributeValue);
     }
-
-//    public boolean checkBox_isChecked(By element, int boxNumber) {
-//        return element_checkFromList(element, boxNumber);
-//    }
-//     public boolean element_checkFromList(By element, int listResultNumber) {}
 
 
     public boolean element_checkBoxIsChecked(By element, int boxNumber) {
@@ -166,10 +167,23 @@ public class CodeBehindTestcases {
         return flag_countryText;
     }
 
+    public String element_DragDrop(By BydraggableElement, By ByDroppableElement) {
+        // 2. Locate the draggable and droppable elements
+
+        WebElement draggable = element_wait(BydraggableElement);
+        WebElement droppable = driver.findElement(ByDroppableElement);
+
+        // 3. Perform drag and drop action
+        new Actions(driver).dragAndDrop(draggable, droppable).build().perform();
+        // 4. Wait for the droppable element's text to change
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.textToBePresentInElement(droppable, "Dropped!"));
+        // 5. Assert the text has changed
+        return droppable.getText();
+    }
+
     public enum myBrowsersList {
-        CHROME,
-        FIREFOX,
-        EDGE
+        CHROME, FIREFOX, EDGE
     }
 
 

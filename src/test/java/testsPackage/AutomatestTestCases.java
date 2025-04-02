@@ -15,6 +15,7 @@ public class AutomatestTestCases {
     String URL_heroCheckBox = "http://the-internet.herokuapp.com/checkboxes";
     String URL_w3_htmlTable = "https://www.w3schools.com/html/html_tables.asp";
     String URL_heroUpload = "http://the-internet.herokuapp.com/upload";
+    String URL_jqueryuiDragDrop ="https://jqueryui.com/resources/demos/droppable/default.html";
 
     //TC1 Data //
     String TC1_expectedPageTitle = "Google";
@@ -59,6 +60,11 @@ public class AutomatestTestCases {
     By ByFileInputElement = By.id("file-upload");
     By ByFileSubmitElement = By.id("file-submit");
     By BySuccessMessageElement = By.id("uploaded-files");
+    // TC9 Data //
+    String TC9_draggable_Locator = "draggable";
+    By TC9_BydraggableElement = By.id(TC9_draggable_Locator);
+    String TC9_droppable_Locator = "droppable";
+    By TC9_ByDroppableElement = By.id(TC9_droppable_Locator);
 
     public AutomatestTestCases() {
         codeBehindTCs = new CodeBehindTestcases();
@@ -146,9 +152,7 @@ public class AutomatestTestCases {
 
         // Assertion
         String actualResult = codeBehindTCs.element_selectFromList(TC4_BySearch_List, TC4_listResultNumber);
-        Assert.assertEquals(actualResult, TC4_expectedResult,
-                "List result value NOT Matched, The expected is ->  " + TC4_expectedResult +
-                        " but The Actual is ->  " + actualResult);
+        Assert.assertEquals(actualResult, TC4_expectedResult, "List result value NOT Matched, The expected is ->  " + TC4_expectedResult + " but The Actual is ->  " + actualResult);
         System.out.println("Test passed! First result link matches expected.");
 
     }
@@ -170,9 +174,7 @@ public class AutomatestTestCases {
         codeBehindTCs.element_wait(TC5_BySecondResultElement);
         String actualLink = codeBehindTCs.element_getDomAttribute(TC5_BySecondResultElement, "href");
 
-        Assert.assertTrue(actualLink.contains(TC5_expectedLink),
-                "Second result link NOT Matched, The expected is " + TC5_expectedLink +
-                        " The Actual is " + actualLink);
+        Assert.assertTrue(actualLink.contains(TC5_expectedLink), "Second result link NOT Matched, The expected is " + TC5_expectedLink + " The Actual is " + actualLink);
         System.out.println("Test passed! Second result link matches expected.");
 
 
@@ -189,10 +191,8 @@ public class AutomatestTestCases {
         codeBehindTCs.openBrowser(CodeBehindTestcases.myBrowsersList.CHROME);
         codeBehindTCs.openURL(URL_heroCheckBox);
         // Assertion
-        Assert.assertTrue(codeBehindTCs.element_checkBoxIsChecked(TC6_ByCheckBoxesElement, 1),
-                "First checkbox should be checked");
-        Assert.assertTrue(codeBehindTCs.element_checkBoxIsChecked(TC6_ByCheckBoxesElement, 2),
-                "Second checkbox should be checked");
+        Assert.assertTrue(codeBehindTCs.element_checkBoxIsChecked(TC6_ByCheckBoxesElement, 1), "First checkbox should be checked");
+        Assert.assertTrue(codeBehindTCs.element_checkBoxIsChecked(TC6_ByCheckBoxesElement, 2), "Second checkbox should be checked");
         System.out.println("Test passed! FIRST & SECOND Checkboxes are checked.");
 
     }
@@ -210,9 +210,7 @@ public class AutomatestTestCases {
         String actualCountryResult = codeBehindTCs.validateCountryForTheCompany(TC7_ByCountryElement, TC7_ByCompanyElement, TC7_expectedCompanyName);
         Assert.assertEquals(actualCountryResult, TC7_expectedCountryName);
 
-        System.out.println("Test passed! First result link matches expected.." + "Actual Country Name -> " + actualCountryResult +
-                " ,  Expected Company Name -> " + TC7_expectedCompanyName +
-                " & Expected Country Name -> " + TC7_expectedCountryName);
+        System.out.println("Test passed! First result link matches expected.." + "Actual Country Name -> " + actualCountryResult + " ,  Expected Company Name -> " + TC7_expectedCompanyName + " & Expected Country Name -> " + TC7_expectedCountryName);
 
     }
 
@@ -222,17 +220,38 @@ public class AutomatestTestCases {
         //●	Navigate to [http://the-internet.herokuapp.com/upload]
         //●	Upload a small image file
         //●	Assert that the file was uploaded successfully
-        //●	Close Google Chrome
         //-----Steps-----------------------------------------
         codeBehindTCs.openBrowser(CodeBehindTestcases.myBrowsersList.CHROME);
         codeBehindTCs.openURL(URL_heroUpload);
         // Assertion
-        String uploadedFileName = codeBehindTCs.element_uploadDocument(TC8_filePath, ByFileInputElement, ByFileSubmitElement, BySuccessMessageElement);
-        Assert.assertTrue(uploadedFileName.equals(TC8_fileName),
-                "File upload failed. Actual -> " + uploadedFileName + " & Expected -> " + TC8_fileName);
+        String actualUploadedFileName = codeBehindTCs.element_uploadDocument(TC8_filePath, ByFileInputElement, ByFileSubmitElement, BySuccessMessageElement);
+        //Assert.assertTrue(uploadedFileName.equals(TC8_fileName),"File upload failed. Actual -> " + uploadedFileName + " & Expected -> " + TC8_fileName);
+        Assert.assertEquals(TC8_fileName, actualUploadedFileName, "File upload failed. Actual -> " + actualUploadedFileName + " & Expected -> " + TC8_fileName);
 
-        System.out.println("File uploaded successfully: " + uploadedFileName);
+        System.out.println("File uploaded successfully: " + actualUploadedFileName);
     }
 
+    @Test
+    public void TC9()
+    {
+        String URL_jqueryuiDragDrop ="https://jqueryui.com/resources/demos/droppable/default.html";
+
+        //●	Open Google Chrome
+        //●	Navigate to [https://jqueryui.com/resources/demos/droppable/default.html]
+        //●	Drag [Drag me to my target] and drop it on [Drop here]
+        //●	Assert that the text has been changed to [Dropped!]
+
+        //-----Steps-----------------------------------------
+        codeBehindTCs.openBrowser(CodeBehindTestcases.myBrowsersList.CHROME);
+        codeBehindTCs.openURL(URL_jqueryuiDragDrop);
+
+        String droppableText = codeBehindTCs.element_DragDrop(TC9_BydraggableElement,TC9_ByDroppableElement);
+
+        Assert.assertEquals(droppableText, "Dropped!",
+                "Drag and drop failed. Expected text 'Dropped!' but found: " + droppableText);
+
+        System.out.println("Drag and drop successful. Text changed to: " + droppableText);
+
+    }
 }
 
